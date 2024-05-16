@@ -17,40 +17,43 @@ class ToDoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      endActionPane: ActionPane(motion: StretchMotion(), children: [
-        SlidableAction(
-            onPressed: deleteTask,
-            backgroundColor: Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Delete')
-      ]),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Row(
-            children: [
-              Checkbox(
-                value: checkVal,
-                onChanged: onChanged,
-                activeColor: Colors.black,
-              ),
-              Text(
-                tileName,
-                style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.normal,
-                    decoration: checkVal
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Slidable(
+        endActionPane: ActionPane(motion: StretchMotion(), children: [
+          SlidableAction(
+              borderRadius: BorderRadius.circular(12),
+              onPressed: deleteTask,
+              backgroundColor: Color(0xFFFE4A49),
+              foregroundColor: Colors.white,
+              icon: Icons.delete,
+              label: 'Delete')
+        ]),
+       
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Checkbox(
+                  value: checkVal,
+                  onChanged: onChanged,
+                  activeColor: Colors.black,
+                ),
+                Text(
+                  tileName,
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.normal,
+                      decoration: checkVal
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none),
+                ),
+              ],
+            ),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12), color: Colors.green),
           ),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12), color: Colors.green),
-        ),
+      
       ),
     );
   }

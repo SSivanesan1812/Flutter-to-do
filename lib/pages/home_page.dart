@@ -2,6 +2,8 @@
 
 import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
+import "package:hive/hive.dart";
+import "package:to_do_app/database/db.dart";
 import "package:to_do_app/utils/DialogBox.dart";
 import "package:to_do_app/utils/TodoTile.dart";
 
@@ -14,25 +16,35 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
 
+  final box=Hive.box("ToDoDb");
+  ToDoDatabase db= ToDoDatabase();
   final controller=TextEditingController();
-  List _toDoList = [
-    ["eat", true],
-    ["sleep", false]
-  ];
-
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    if(box.get("key")==null){
+      db.createInit();
+    }
+    else{
+      db.loadData();
+    }
+    super.initState();
+  }
   void checkChange(int index) {
     setState(() {
-      _toDoList[index][1] = !_toDoList[index][1];
+      db.toDoList[index][1] = !db.toDoList[index][1];
     });
   }
 
   void addTask(){
     setState(() {
-      _toDoList.add([controller.text,false]);
+      db.toDoList.add([controller.text,false]);
       controller.clear();
-      
     });
     Navigator.of(context).pop();
+        db.updateData();
+
   }
 
    getTask() {
@@ -41,7 +53,7 @@ class _HomepageState extends State<Homepage> {
   }
    delteTask(int index){
     setState(() {
-      _toDoList.removeAt(index);
+      db.toDoList.removeAt(index);
     });
   }
 
@@ -60,13 +72,13 @@ class _HomepageState extends State<Homepage> {
             backgroundColor: Colors.green,
           ),
           body: ListView.builder(
-            itemCount: _toDoList.length,
+            itemCount: db.toDoList.length,
             itemBuilder: (context, index) {
               return ToDoTile(
                 deleteTask: (p0) => delteTask(index),
-                  checkVal: _toDoList[index][1],
+                  checkVal: db.toDoList[index][1],
                   onChanged: (value) => checkChange(index),
-                  tileName: _toDoList[index][0]);
+                  tileName: db.toDoList[index][0]);
             },
           )),
     );
